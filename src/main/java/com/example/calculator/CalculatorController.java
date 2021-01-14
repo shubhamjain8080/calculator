@@ -11,8 +11,13 @@ public class CalculatorController {
   @MessageMapping("/calculate")
   @SendTo("/topic/calculationResult")
   public CalculationResult calculateResult(CalculationQuery query) {
+    String resultForQuery;
+    try {
+      resultForQuery = CalculatorUtil.resolveQuery(query.getQuery());
+    } catch (Exception e) {
+      resultForQuery = "Something went wrong!!";
+    }
     return new CalculationResult(
-        HtmlUtils.htmlEscape(query.getQuery()),
-        HtmlUtils.htmlEscape(CalculatorUtil.resolveQuery(query.getQuery())));
+        HtmlUtils.htmlEscape(query.getQuery()), HtmlUtils.htmlEscape(resultForQuery));
   }
 }

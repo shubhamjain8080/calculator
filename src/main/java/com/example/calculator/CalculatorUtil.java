@@ -26,20 +26,12 @@ public class CalculatorUtil {
       return "Invalid Input";
     }
 
-    if (completeQuery.startsWith("(") && completeQuery.endsWith(")")) {
-      completeQuery = completeQuery.substring(1);
-      completeQuery = completeQuery.substring(0, completeQuery.length() - 1);
-    }
     completeQuery = resolveBracketQueries(completeQuery);
     completeQuery = resolveDivisionQueries(completeQuery);
     completeQuery = resolveMultiplicationQueries(completeQuery);
     completeQuery = resolveAdditionQueries(completeQuery);
     completeQuery = resolveSubtractionQueries(completeQuery);
-    if (completeQuery.contains("(")) {
-      completeQuery = completeQuery.replace("(", "");
-      completeQuery = completeQuery.replace(")", "");
-      completeQuery = resolveQuery(completeQuery);
-    }
+    completeQuery = removeRedundantBracketsAndCalculateResult(completeQuery);
     return completeQuery;
   }
 
@@ -50,7 +42,7 @@ public class CalculatorUtil {
   }
 
   private static String resolveBracketQueries(String completeQuery) {
-
+    completeQuery = removeOpeningAndClosingBrackets(completeQuery);
     Pattern p = Pattern.compile(BRACKET_REGEX);
     Matcher matcher = p.matcher(completeQuery);
     while (matcher.find()) {
@@ -134,5 +126,22 @@ public class CalculatorUtil {
       result = result / Double.parseDouble(split[i]);
     }
     return String.valueOf(result);
+  }
+
+  private static String removeOpeningAndClosingBrackets(String completeQuery) {
+    if (completeQuery.startsWith("(") && completeQuery.endsWith(")")) {
+      completeQuery = completeQuery.substring(1);
+      completeQuery = completeQuery.substring(0, completeQuery.length() - 1);
+    }
+    return completeQuery;
+  }
+
+  private static String removeRedundantBracketsAndCalculateResult(String completeQuery) {
+    if (completeQuery.contains("(") && completeQuery.contains(")")) {
+      completeQuery = completeQuery.replace("(", "");
+      completeQuery = completeQuery.replace(")", "");
+      completeQuery = resolveQuery(completeQuery);
+    }
+    return completeQuery;
   }
 }
