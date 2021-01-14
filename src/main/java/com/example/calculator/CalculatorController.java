@@ -13,7 +13,7 @@ public class CalculatorController {
   public CalculationResult calculateResult(CalculationQuery query) {
     String resultForQuery;
     try {
-      resultForQuery = CalculatorUtil.resolveQuery(query.getQuery());
+      resultForQuery = CalculatorUtil.resolveQuery(query.getQuery().replaceAll("\\s", ""));
     } catch (Exception e) {
       resultForQuery = "Something went wrong!!";
     }

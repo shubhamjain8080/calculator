@@ -62,7 +62,7 @@ class CalculatorApplicationTests {
                     assertEquals("6", calculationResult.getResult());
                   }
                 });
-            session.send("/app/calculate", new CalculationQuery("2*3"));
+            session.send("/app/calculate", new CalculationQuery(" 2 * 3 "));
           }
         };
 
